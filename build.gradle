@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.graphstream:gs-core:2.0'
+    implementation 'org.graphstream:gs-ui-javafx:2.0'
+}
