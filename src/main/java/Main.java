@@ -1,5 +1,5 @@
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.SingleGraph;
+import graph.*;
+import production.Production1;
 
 public class Main {
 
@@ -7,18 +7,18 @@ public class Main {
     public static void main(String[] args) {
         System.setProperty("org.graphstream.ui", "javafx");
 
-        Graph graph = new SingleGraph("Tutorial 1");
+        Graph graph = new Graph();
 
-        graph.addNode("A");
-        graph.addNode("B");
-        graph.addNode("C");
-        graph.addNode("D");
-        graph.addEdge("AB", "A", "B");
-        graph.addEdge("BC", "B", "C");
-        graph.addEdge("CD", "C", "D");
-        graph.addEdge("AD", "A", "D");
+        Node e = new Node("E", 1, 1, 0);
+        graph.addNode(e);
 
-        graph.display();
+        graph.applyProduction(new Production1());
+
+        GraphUtil.displayGraph(graph, 0);
+
+        GraphUtil.displayGraph(graph, 1);
+
+        GraphUtil.displayGraph(graph);
     }
 
 }
