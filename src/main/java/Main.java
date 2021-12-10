@@ -16,7 +16,7 @@ public class Main {
 
         GraphUtil.displayGraph(graph, 0);
 
-        GraphUtil.displayGraph(graph, 1);
+        GraphUtil.displayGraph(graph,1);
 
         GraphUtil.displayGraph(graph);
     }

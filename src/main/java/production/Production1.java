@@ -7,19 +7,20 @@ import graph.Node;
 public class Production1 implements Production {
 
     public Graph apply(Graph graph) {
-        for(Node node: graph.getNodes()) {
-            if("E".equals(node.getLabel())) {
+        for (Node node : graph.getNodes()) {
+            if ("E".equals(node.getLabel())) {
                 float oldX = node.getX();
                 float oldY = node.getY();
-                int newLevel = node.getLevel() + 1;
+
+                int newLevel = graph.getNodes().stream().mapToInt(Node::getLevel).max().getAsInt() + 1;
 
                 node.setLabel("e");
 
                 Node I = new Node("I", oldX, oldY, newLevel);
-                Node E1 = new Node("E", oldX-1, oldY+1, newLevel);
-                Node E2 = new Node("E", oldX+1, oldY+1, newLevel);
-                Node E3 = new Node("E", oldX+1, oldY-1, newLevel);
-                Node E4 = new Node("E", oldX-1, oldY-1, newLevel);
+                Node E1 = new Node("E", oldX - 1, oldY + 1, newLevel);
+                Node E2 = new Node("E", oldX + 1, oldY + 1, newLevel);
+                Node E3 = new Node("E", oldX + 1, oldY - 1, newLevel);
+                Node E4 = new Node("E", oldX - 1, oldY - 1, newLevel);
                 graph.addNode(I);
                 graph.addNode(E1);
                 graph.addNode(E2);
