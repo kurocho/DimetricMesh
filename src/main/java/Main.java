@@ -1,5 +1,6 @@
 import graph.*;
 import production.Production1;
+import production.Production2;
 
 public class Main {
 
@@ -13,6 +14,8 @@ public class Main {
         graph.addNode(e);
 
         graph.applyProduction(new Production1());
+
+        graph.applyProduction(new Production2());
 
         GraphUtil.displayGraph(graph, 0);
 

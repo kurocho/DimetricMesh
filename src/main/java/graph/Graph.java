@@ -32,6 +32,10 @@ public class Graph {
         edges.add(edge);
     }
 
+    public void addEdge(Node startNode, Node endNode) {
+        edges.add(new Edge(startNode, endNode));
+    }
+
     public void applyProduction(Production production) {
         production.apply(this);
     }

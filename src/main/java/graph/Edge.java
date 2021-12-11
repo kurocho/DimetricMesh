@@ -20,6 +20,22 @@ public class Edge {
     }
 
     public String getId() {
-        return start.getId() + end.getId();
+        return start.getId() + "-" + end.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = start.hashCode();
+        result = 31 * result + end.hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Edge edge = (Edge) o;
+        return edge.getId().equals(this.getId());
     }
 }

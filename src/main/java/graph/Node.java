@@ -17,6 +17,13 @@ public class Node {
         this.level = level;
     }
 
+    public Node(Node oldNode, int level) {
+        this.label = oldNode.label;
+        this.x = oldNode.x;
+        this.y = oldNode.y;
+        this.level = level;
+    }
+
     public String getLabel() {
         return label;
     }
@@ -38,7 +45,25 @@ public class Node {
     }
 
     public String getId() {
-        return label + x + y + level;
+        return label + "|" + x + "|" + y + "|" + level;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node node = (Node) o;
+
+        return getId().equals(node.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = label.hashCode();
+        result = 31 * result + (x != +0.0f ? Float.floatToIntBits(x) : 0);
+        result = 31 * result + (y != +0.0f ? Float.floatToIntBits(y) : 0);
+        result = 31 * result + level;
+        return result;
+    }
 }
