@@ -30,7 +30,7 @@ public class GraphUtil {
         for (Node node : graph.getNodes()) {
             org.graphstream.graph.Node n = singleGraph.addNode(node.getId());
             n.setAttribute("xy", node.getX(), node.getY() - node.getLevel() * 4);
-            n.setAttribute("ui.label", node.getLabel());
+            n.setAttribute("ui.label", node.getLabel()+" ("+node.getX()+", "+node.getY()+")");
         }
 
         for (Edge e : graph.getEdges()) {

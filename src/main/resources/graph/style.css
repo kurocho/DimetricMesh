@@ -1,9 +1,9 @@
 
 node {
-    text-size: 20;
+    text-size: 8;
     text-alignment: under;
     text-style: normal;
     text-mode: normal;
-    text-background-mode: rounded-box;
+    text-background-mode: none;
     text-offset: 10;
 }
