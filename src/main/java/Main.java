@@ -1,6 +1,7 @@
 import graph.*;
 import production.Production1;
 import production.Production12;
+import production.Production13;
 import production.Production2;
 
 public class Main {
@@ -27,7 +28,7 @@ public class Main {
 //
 //        GraphUtil.displayGraph(graph,1);
 
-        GraphUtil.displayGraph(graph);
+//        GraphUtil.displayGraph(graph);
 
         Graph tstGraph = new Graph();
         Node mainNode = new Node("E", 0, 0, 0);
@@ -72,7 +73,9 @@ public class Main {
         tstGraph.addEdge(rightIChild, rightIETwo);
         tstGraph.addEdge(rightIEOne, rightIETwo);
 
-//        GraphUtil.displayGraph(tstGraph);
+//        tstGraph.applyProduction(new Production13());
+
+        GraphUtil.displayGraph(tstGraph);
     }
 
 }

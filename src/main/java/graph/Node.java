@@ -52,6 +52,12 @@ public class Node {
         return label + "|" + x + "|" + y + "|" + level + "|" + nodeId;
     }
 
+
+    @Override
+    public String toString() {
+        return label + "|" + x + "|" + y + "|" + level + "|" + nodeId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,7 +65,6 @@ public class Node {
 
         Node node = (Node) o;
 
-//        return hashCode() == node.hashCode();
         return getId().equals(node.getId());
     }
 
