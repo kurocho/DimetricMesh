@@ -7,9 +7,10 @@ import java.util.Set;
 
 public class Graph {
 
-    private Set<Node> nodes;
+    static int lastNodeId = 201160819;
 
-    private Set<Edge> edges;
+    private final Set<Node> nodes;
+    private final Set<Edge> edges;
 
     public Graph() {
         nodes = new HashSet<>();
