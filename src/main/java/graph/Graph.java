@@ -36,6 +36,23 @@ public class Graph {
         edges.add(new Edge(startNode, endNode));
     }
 
+    public void removeNode(Node node) {
+        if (!nodes.contains(node)) {
+            throw new IllegalArgumentException("Node is not in graph");
+        }
+        node.getEdges().forEach(edge -> edge.getDestination(node).getEdges().remove(edge));
+        nodes.remove(node);
+    }
+
+    public void removeEdge(Edge edge) {
+        if(!edges.contains(edge)) {
+            throw new IllegalArgumentException("Edge is not in graph");
+        }
+        edge.getStart().getEdges().remove(edge);
+        edge.getEnd().getEdges().remove(edge);
+        edges.remove(edge);
+    }
+
     public void applyProduction(Production production) {
         production.apply(this);
     }
