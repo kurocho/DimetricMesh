@@ -8,6 +8,23 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Production2 implements Production {
+
+    public enum BreakMode {
+        ANY,
+        HORIZONTAL,
+        VERTICAL
+    }
+
+    private final BreakMode breakMode;
+
+    public Production2() {
+        this.breakMode = BreakMode.ANY;
+    }
+
+    public Production2(BreakMode breakMode) {
+        this.breakMode = breakMode;
+    }
+
     @Override
     public Graph apply(Graph graph) {
         Node nodeI = null;
@@ -15,7 +32,7 @@ public class Production2 implements Production {
         for (Node node : graph.getNodes()) { //lets find any I
             if ("I".equals(node.getLabel())) {
                 for (Node neighbor : node.getNeighbors()) { //lets find all edges with this I and E node
-                    if ("E".equals(neighbor.getLabel()) ) {
+                    if ("E".equals(neighbor.getLabel())) {
                         nodesE.add(neighbor);
                     }
                 }
@@ -137,10 +154,15 @@ public class Production2 implements Production {
 
     private Edge getEdgeToBreak(List<Node> nodes) {
         // replace with better logic to support choosing if break should be vertical or horizontal
-        Node anyNode = nodes.get(0);
-        for (Edge edge : anyNode.getEdges()) {
-            if (nodes.contains(edge.getDestination(anyNode))) {
-                return edge;
+        Node firstNode = nodes.get(0);
+        for (Edge edge : firstNode.getEdges()) {
+            Node destination = edge.getDestination(firstNode);
+            if (nodes.contains(edge.getDestination(firstNode))) {
+                if (breakMode == BreakMode.ANY
+                        || (breakMode == BreakMode.VERTICAL && firstNode.getY() == destination.getY())
+                        || (breakMode == BreakMode.HORIZONTAL && firstNode.getX() == destination.getX())) {
+                    return edge;
+                }
             }
         }
         throw new IllegalStateException("Node not connected to other E node");

@@ -15,17 +15,10 @@ public class Main {
 
         graph.applyProduction(new Production1());
 
-        graph.applyProduction(new Production2());
+        graph.applyProduction(new Production2(Production2.BreakMode.HORIZONTAL));
 
-        graph.applyProduction(new Production2());
-        graph.applyProduction(new Production2());
-
-        graph.applyProduction(new Production2());
-        graph.applyProduction(new Production2());
-        graph.applyProduction(new Production2());
-        graph.applyProduction(new Production2());
-
-        GraphUtil.displayGraph(graph,4);
+        graph.applyProduction(new Production2(Production2.BreakMode.VERTICAL));
+        graph.applyProduction(new Production2(Production2.BreakMode.HORIZONTAL));
 
         GraphUtil.displayGraph(graph);
     }
