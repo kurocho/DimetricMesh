@@ -1,15 +1,15 @@
 package graph;
 
+import org.graphstream.graph.EdgeRejectedException;
+import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.graphicGraph.GraphicGraph;
-import org.graphstream.ui.graphicGraph.stylesheet.StyleConstants;
-import org.graphstream.ui.spriteManager.Sprite;
-import org.graphstream.ui.spriteManager.SpriteManager;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.util.InteractiveElement;
 import org.graphstream.ui.view.util.MouseManager;
 
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.EnumSet;
@@ -22,19 +22,28 @@ public class GraphUtil {
 
 
         try {
-            String styles = new String(Files.readAllBytes(Paths.get(GraphUtil.class.getResource("style.css").toURI())));
-            singleGraph.setAttribute("ui.stylesheet", styles);
-        } catch (Exception e) {
+            URL resource = GraphUtil.class.getResource("style.css");
+            if (resource != null) {
+                String styles = new String(Files.readAllBytes(Paths.get(resource.toURI())));
+                singleGraph.setAttribute("ui.stylesheet", styles);
+            }
+        } catch (Exception ignored) {
         }
 
         for (Node node : graph.getNodes()) {
-            org.graphstream.graph.Node n = singleGraph.addNode(node.getId());
-            n.setAttribute("xy", node.getX(), node.getY() - node.getLevel() * 4);
-            n.setAttribute("ui.label", node.getLabel()+" ("+node.getX()+", "+node.getY()+")");
+            try {
+                org.graphstream.graph.Node n = singleGraph.addNode(node.getId());
+                n.setAttribute("xy", node.getX(), node.getY() - node.getLevel() * 4);
+                n.setAttribute("ui.label", node.getLabel() + " (" + node.getX() + ", " + node.getY() + ")");
+            } catch (IdAlreadyInUseException ignored) { // ignore nodes in same x, y and level
+            }
         }
 
         for (Edge e : graph.getEdges()) {
-            singleGraph.addEdge(e.getId(), e.getStart().getId(), e.getEnd().getId());
+            try {
+                singleGraph.addEdge(e.getId(), e.getStart().getId(), e.getEnd().getId());
+            } catch (EdgeRejectedException ignored) { //// ignore edges in same place
+            }
         }
 
         Viewer viewer = singleGraph.display(false);

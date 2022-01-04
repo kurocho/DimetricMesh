@@ -2,21 +2,21 @@ package graph;
 
 import production.Production;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Graph {
 
-    private Set<Node> nodes;
+    private final List<Node> nodes;
 
-    private Set<Edge> edges;
+    private final List<Edge> edges;
 
     public Graph() {
-        nodes = new HashSet<>();
-        edges = new HashSet<>();
+        nodes = new ArrayList<>();
+        edges = new ArrayList<>();
     }
 
-    public Set<Node> getNodes() {
+    public List<Node> getNodes() {
         return nodes;
     }
 
@@ -24,7 +24,7 @@ public class Graph {
         nodes.add(node);
     }
 
-    public Set<Edge> getEdges() {
+    public List<Edge> getEdges() {
         return edges;
     }
 

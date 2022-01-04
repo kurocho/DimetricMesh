@@ -17,9 +17,15 @@ public class Main {
 
         graph.applyProduction(new Production2());
 
-        GraphUtil.displayGraph(graph, 0);
+        graph.applyProduction(new Production2());
+        graph.applyProduction(new Production2());
 
-        GraphUtil.displayGraph(graph,1);
+        graph.applyProduction(new Production2());
+        graph.applyProduction(new Production2());
+        graph.applyProduction(new Production2());
+        graph.applyProduction(new Production2());
+
+        GraphUtil.displayGraph(graph,4);
 
         GraphUtil.displayGraph(graph);
     }
