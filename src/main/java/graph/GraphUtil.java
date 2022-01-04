@@ -34,7 +34,15 @@ public class GraphUtil {
             try {
                 org.graphstream.graph.Node n = singleGraph.addNode(node.getId());
                 n.setAttribute("xy", node.getX(), node.getY() - node.getLevel() * 4);
-                n.setAttribute("ui.label", node.getLabel() + " (" + node.getX() + ", " + node.getY() + ")");
+//                n.setAttribute("ui.label", node.getLabel() + " (" + node.getX() + ", " + node.getY() + ")");
+                switch (node.getLabel()) {
+                    case "I":
+                        n.setAttribute("ui.style", "fill-color: red;");
+                        break;
+                    case "i":
+                        n.setAttribute("ui.style", "fill-color: green;");
+                        break;
+                }
             } catch (IdAlreadyInUseException ignored) { // ignore nodes in same x, y and level
             }
         }
