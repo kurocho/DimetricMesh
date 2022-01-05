@@ -37,7 +37,7 @@ public class GraphUtil {
         for (Node node : graph.getNodes()) {
             try {
                 org.graphstream.graph.Node n = singleGraph.addNode(node.getId());
-                Pair<Double, Double> vector = getShiftVector(graph, node);
+                Pair<Double, Double> vector = getShiftVector(node);
                 n.setAttribute("xy", node.getX() + vector.getKey(), node.getY() + vector.getValue() - node.getLevel() * 4);
 //                n.setAttribute("ui.label", node.getLabel() + " (" + node.getX() + ", " + node.getY() + ")");
                 switch (node.getLabel()) {
@@ -63,20 +63,16 @@ public class GraphUtil {
         disableMouseEvents(viewer);
     }
 
-    public static Pair<Double, Double> getShiftVector(Graph graph, Node node) {
+    public static Pair<Double, Double> getShiftVector(Node node) {
         List<Node> connectedNodes = new ArrayList<>();
-        for(Edge edge: graph.getEdges()) {
-            if(edge.getEnd().getLevel() != edge.getStart().getLevel()) continue;
-            if(edge.getStart().getId().equals(node.getId())) {
-                connectedNodes.add(edge.getEnd());
-            } else if(edge.getEnd().getId().equals(node.getId())) {
-                connectedNodes.add(edge.getStart());
-            }
+        for (Edge edge : node.getEdges()) {
+            if (edge.getEnd().getLevel() != edge.getStart().getLevel()) continue;
+            connectedNodes.add(edge.getDestination(node));
         }
 
         double vectorX = 0;
         double vectorY = 0;
-        for(Node edgeNode: connectedNodes) {
+        for (Node edgeNode : connectedNodes) {
             vectorX += (edgeNode.getX() - node.getX());
             vectorY += (edgeNode.getY() - node.getY());
         }
