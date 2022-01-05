@@ -52,7 +52,7 @@ public class Graph {
     }
 
     public void addEdge(Node startNode, Node endNode) {
-        edges.add(new Edge(startNode, endNode));
+        addEdge(new Edge(startNode, endNode));
     }
 
     public void removeNode(Node node) {
