@@ -12,7 +12,7 @@ public class Production1 implements Production {
                 float oldX = node.getX();
                 float oldY = node.getY();
 
-                int newLevel = graph.getNodes().stream().mapToInt(Node::getLevel).max().getAsInt() + 1;
+                int newLevel = node.getLevel() + 1;
 
                 node.setLabel("e");
 

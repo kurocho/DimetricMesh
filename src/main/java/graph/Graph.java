@@ -2,18 +2,18 @@ package graph;
 
 import production.Production;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Graph {
 
-    static int lastNodeId = 201160819;
+    private final List<Node> nodes;
 
-    private final Set<Node> nodes;
-    private final Set<Edge> edges;
+    private final List<Edge> edges;
 
     public Graph() {
-        nodes = new HashSet<>();
-        edges = new HashSet<>();
+        nodes = new ArrayList<>();
+        edges = new ArrayList<>();
     }
 
     public List<Node> getNeighbors(Node node, String type) {
@@ -30,7 +30,7 @@ public class Graph {
         return edges.contains(new Edge(first, second)) || edges.contains(new Edge(second, first));
     }
 
-    public Set<Node> getNodes() {
+    public List<Node> getNodes() {
         return nodes;
     }
 
@@ -38,11 +38,7 @@ public class Graph {
         nodes.add(node);
     }
 
-    public void removeNode(Node node) {
-        nodes.remove(node);
-    }
-
-    public Set<Edge> getEdges() {
+    public List<Edge> getEdges() {
         return edges;
     }
 
@@ -54,11 +50,27 @@ public class Graph {
         edges.add(new Edge(startNode, endNode));
     }
 
-    public void removeEdge(Node startNode, Node endNode) {
-        edges.remove(new Edge(startNode, endNode));
+    public void removeNode(Node node) {
+        if (!nodes.contains(node)) {
+            throw new IllegalArgumentException("Node is not in graph");
+        }
+
+        node.getEdges().forEach(edge -> {
+            final Node destination = edge.getDestination(node);
+            if(node != destination) {
+                final List<Edge> destinationEdges = destination.getEdges();
+                destinationEdges.remove(edge);
+            }
+        });
+        nodes.remove(node);
     }
 
     public void removeEdge(Edge edge) {
+        if(!edges.contains(edge)) {
+            throw new IllegalArgumentException("Edge is not in graph");
+        }
+        edge.getStart().getEdges().remove(edge);
+        edge.getEnd().getEdges().remove(edge);
         edges.remove(edge);
     }
 

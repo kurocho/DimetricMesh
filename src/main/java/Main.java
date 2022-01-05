@@ -18,11 +18,10 @@ public class Main {
 
         graph.applyProduction(new Production1());
 
-        graph.applyProduction(new Production2());
+        graph.applyProduction(new Production2(Production2.BreakMode.HORIZONTAL));
 
-        graph.applyProduction(new Production12());
-
-        graph.applyProduction(new Production12());
+        graph.applyProduction(new Production2(Production2.BreakMode.VERTICAL));
+        graph.applyProduction(new Production2(Production2.BreakMode.HORIZONTAL));
 
 //        GraphUtil.displayGraph(graph, 0);
 //
@@ -73,7 +72,7 @@ public class Main {
         tstGraph.addEdge(rightIChild, rightIETwo);
         tstGraph.addEdge(rightIEOne, rightIETwo);
 
-//        tstGraph.applyProduction(new Production13());
+        tstGraph.applyProduction(new Production13());
 
         GraphUtil.displayGraph(tstGraph);
     }

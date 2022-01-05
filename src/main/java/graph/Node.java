@@ -1,6 +1,12 @@
 package graph;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class Node {
+
+    static int lastNodeId = 201160819;
 
     private String label;
 
@@ -12,12 +18,14 @@ public class Node {
 
     private final int nodeId;
 
+    private final List<Edge> edges = new ArrayList<>();
+
     public Node(String label, float x, float y, int level) {
         this.label = label;
         this.x = x;
         this.y = y;
         this.level = level;
-        this.nodeId = Graph.lastNodeId++;
+        this.nodeId = lastNodeId++;
     }
 
     public Node(Node oldNode, int level) {
@@ -25,7 +33,7 @@ public class Node {
         this.x = oldNode.x;
         this.y = oldNode.y;
         this.level = level;
-        this.nodeId = Graph.lastNodeId++;
+        this.nodeId = lastNodeId++;
     }
 
     public String getLabel() {
@@ -58,6 +66,18 @@ public class Node {
         return label + "|" + x + "|" + y + "|" + level + "|" + nodeId;
     }
 
+    public List<Edge> getEdges() {
+        return edges;
+    }
+
+    public List<Node> getNeighbors() {
+        List<Node> neighbors = new ArrayList<>();
+        for (Edge edge : edges) {
+            neighbors.add(edge.getDestination(this));
+        }
+        return neighbors;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,11 +90,6 @@ public class Node {
 
     @Override
     public int hashCode() {
-        int result = label.hashCode();
-        result = 31 * result + (x != +0.0f ? Float.floatToIntBits(x) : 0);
-        result = 31 * result + (y != +0.0f ? Float.floatToIntBits(y) : 0);
-        result = 31 * result + level;
-        result = 31 * result + nodeId;
-        return result;
+        return Objects.hash(label, x, y, label, nodeId);
     }
 }

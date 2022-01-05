@@ -1,5 +1,6 @@
 package production;
 
+import graph.Edge;
 import graph.Graph;
 import graph.Node;
 import javafx.util.Pair;
@@ -26,9 +27,9 @@ public class Production13 implements Production {
             return graph; // unedited
         }
 
-        graph.removeEdge(rightNodes.get(0), rightNodes.get(2));
-        graph.removeEdge(rightNodes.get(0), rightNodes.get(1));
-        graph.removeEdge(rightNodes.get(2), rightNodes.get(1));
+        graph.removeEdge(new Edge(rightNodes.get(0), rightNodes.get(2)));
+        graph.removeEdge(new Edge(rightNodes.get(0), rightNodes.get(1)));
+        graph.removeEdge(new Edge(rightNodes.get(2), rightNodes.get(1)));
         graph.removeNode(rightNodes.get(0));
         graph.removeNode(rightNodes.get(2));
 
