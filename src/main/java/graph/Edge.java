@@ -11,9 +11,6 @@ public class Edge {
     public Edge(Node start, Node end) {
         this.start = start;
         this.end = end;
-
-        start.getEdges().add(this);
-        end.getEdges().add(this);
     }
 
     public Node getStart() {

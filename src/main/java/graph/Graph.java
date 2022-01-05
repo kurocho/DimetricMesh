@@ -43,7 +43,12 @@ public class Graph {
     }
 
     public void addEdge(Edge edge) {
+        if (edge.getStart() == edge.getEnd()) {
+            throw new IllegalArgumentException("We don't support edges between same node");
+        }
         edges.add(edge);
+        edge.getStart().getEdges().add(edge);
+        edge.getEnd().getEdges().add(edge);
     }
 
     public void addEdge(Node startNode, Node endNode) {
@@ -55,13 +60,7 @@ public class Graph {
             throw new IllegalArgumentException("Node is not in graph");
         }
 
-        node.getEdges().forEach(edge -> {
-            final Node destination = edge.getDestination(node);
-            if(node != destination) {
-                final List<Edge> destinationEdges = destination.getEdges();
-                destinationEdges.remove(edge);
-            }
-        });
+        node.getEdges().forEach(edge -> edge.getDestination(node).getEdges().remove(edge));
         nodes.remove(node);
     }
 
