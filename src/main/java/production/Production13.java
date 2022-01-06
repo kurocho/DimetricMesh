@@ -3,7 +3,7 @@ package production;
 import graph.Edge;
 import graph.Graph;
 import graph.Node;
-import javafx.util.Pair;
+import util.Pair;
 
 import java.util.*;
 
