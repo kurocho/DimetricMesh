@@ -1,5 +1,6 @@
 package graph;
 
+import javafx.util.Pair;
 import org.graphstream.graph.EdgeRejectedException;
 import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -8,7 +9,6 @@ import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.util.InteractiveElement;
 import org.graphstream.ui.view.util.MouseManager;
-import util.Pair;
 
 import java.net.URL;
 import java.nio.file.Files;

@@ -1,14 +1,11 @@
 import graph.*;
-import production.Production1;
-import production.Production12;
-import production.Production13;
-import production.Production2;
+import production.*;
 import util.Production13Util;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.setProperty("org.graphstream.ui", "swing");
+        System.setProperty("org.graphstream.ui", "javafx");
         System.setProperty("org.graphstream.debug", "true");
 
         Graph graph = new Graph();

@@ -2,7 +2,7 @@ package production;
 
 import graph.Graph;
 import graph.Node;
-import util.Pair;
+import javafx.util.Pair;
 import util.Triple;
 
 import java.util.*;
