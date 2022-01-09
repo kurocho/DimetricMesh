@@ -4,6 +4,7 @@ import graph.Edge;
 import graph.Graph;
 import graph.Node;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -179,16 +180,23 @@ public class Production3 implements Production {
 
     private boolean areFormingRectangle(List<Node> nodes) {
         if (nodes.size() != 4) return false;
-        for (Node n1 : nodes) {
-            for (Node n2 : nodes) {
-                if (n1.getId().equals(n2.getId()) ||
-                        (n1.getX() != n2.getX() && n1.getY() != n2.getY()))
-                    continue;
-                if (!n1.getNeighbors().contains(n2) || !n2.getNeighbors().contains(n1)) {
-                    return false;
-                }
-            }
+        List<Float> xs = new ArrayList<Float>();
+        List<Float> ys = new ArrayList<Float>();
+        for (Node n : nodes) {
+            //every Node has 2 neighbours from list
+            if (n.getNeighbors().stream().filter(node -> nodes.contains(node)).count() != 2) return false;
+            xs.add(n.getX());
+            ys.add(n.getY());
         }
+
+        if(xs.stream().distinct().count() != 2) return false;
+        if(ys.stream().distinct().count() != 2) return false;
+
+        for (Node n: nodes) {
+            if(xs.stream().filter(x -> x == n.getX()).count() != 2) return false;
+            if(ys.stream().filter(x -> x == n.getY()).count() != 2) return false;
+        }
+
         return true;
     }
 }
