@@ -7,6 +7,7 @@ import graph.Node;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Production3 implements Production {
     public Graph apply(Graph graph){
@@ -180,23 +181,29 @@ public class Production3 implements Production {
 
     private boolean areFormingRectangle(List<Node> nodes) {
         if (nodes.size() != 4) return false;
-        List<Float> xs = new ArrayList<Float>();
-        List<Float> ys = new ArrayList<Float>();
         for (Node n : nodes) {
             //every Node has 2 neighbours from list
-            if (n.getNeighbors().stream().filter(node -> nodes.contains(node)).count() != 2) return false;
-            xs.add(n.getX());
-            ys.add(n.getY());
+            List<Node> neighbours = n.getNeighbors().stream().filter(node -> nodes.contains(node)).collect(Collectors.toList());
+            if (neighbours.size() != 2) return false;
+            boolean hasVerticalEdge = false;
+            boolean hasHorizontalEdge = false;
+
+            for(Node neighbour: neighbours){
+                //if neighbour identical, then nodes are not forming a rectangle
+                if (n.getX() == neighbour.getX() && n.getY() == neighbour.getY()) {
+                    return false;
+                }
+                //if X coord is the same then edge between nodes is horizontal
+                if (n.getX() == neighbour.getX()) {
+                    hasVerticalEdge = true;
+                }
+                //if y coord is the same then edge between nodes is vertical
+                if (n.getY() == neighbour.getY()) {
+                    hasHorizontalEdge = true;
+                }
+            }
+            if(!hasVerticalEdge || !hasHorizontalEdge) return false;
         }
-
-        if(xs.stream().distinct().count() != 2) return false;
-        if(ys.stream().distinct().count() != 2) return false;
-
-        for (Node n: nodes) {
-            if(xs.stream().filter(x -> x == n.getX()).count() != 2) return false;
-            if(ys.stream().filter(x -> x == n.getY()).count() != 2) return false;
-        }
-
         return true;
     }
 }
