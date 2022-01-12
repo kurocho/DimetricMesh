@@ -20,7 +20,7 @@ public class Production4 implements Production {
                 .filter(node -> preApplicationInsideLabel.equals(node.getLabel()))
                 .filter(this::matchesPredicate).findAny();
 
-        if (applicable.isEmpty()) {
+        if (!applicable.isPresent()) {
             System.out.println("Production 4 didn't find anything to run on");
             return graph;
         }
@@ -32,39 +32,39 @@ public class Production4 implements Production {
         int newLevel = applicable.getLevel() + 1;
 
         applicable.setLabel(postApplicationInsideLabel);
-        var nodesBetweenTwo = getNodeBetweenTwo(applicable).stream().findFirst().get();
+        Triple<Node, Node, Node> nodesBetweenTwo = getNodeBetweenTwo(applicable).stream().findFirst().get();
 
-        var newNodesBetweenTwo = Stream.of(nodesBetweenTwo.get1(), nodesBetweenTwo.get3()).map(node -> new Node(node, newLevel)).collect(Collectors.toList());
+        List<Node> newNodesBetweenTwo = Stream.of(nodesBetweenTwo.get1(), nodesBetweenTwo.get3()).map(node -> new Node(node, newLevel)).collect(Collectors.toList());
         newNodesBetweenTwo.forEach(graph::addNode);
 
-        var newOuterTopNode = new Node(nodesBetweenTwo.get2(), newLevel);
+        Node newOuterTopNode = new Node(nodesBetweenTwo.get2(), newLevel);
         graph.addNode(newOuterTopNode);
 
-        var otherNodes = applicable.getNeighbors().stream()
+        List<Node> otherNodes = applicable.getNeighbors().stream()
                 .filter(e -> !e.equals(nodesBetweenTwo.get1()) && !e.equals(nodesBetweenTwo.get3())).collect(Collectors.toList());
 
-        var newOtherNodes = otherNodes.stream()
+        List<Node> newOtherNodes = otherNodes.stream()
                 .map(node -> new Node(node, newLevel))
                 .sorted(nodeComparator)
                 .collect(Collectors.toList());
 
         newOtherNodes.forEach(graph::addNode);
 
-        var coordinates = otherNodes.stream()
+        Pair<Float, Float> coordinates = otherNodes.stream()
                 .map(e -> new Pair<>(e.getX(), e.getY()))
                 .reduce((a, b) -> new Pair<>((a.getKey() + b.getKey()) / 2, (a.getValue() + b.getValue()) / 2))
                 .orElseGet(() -> new Pair<>(0f, 0f));
-        var newOuterBottomNode = new Node("E", coordinates.getKey(), coordinates.getValue(), newLevel);
+        Node newOuterBottomNode = new Node("E", coordinates.getKey(), coordinates.getValue(), newLevel);
         graph.addNode(newOuterBottomNode);
 
-        var leftIx = (nodesBetweenTwo.get1().getX() + newOuterTopNode.getX()) / 2;
-        var leftIy = (nodesBetweenTwo.get1().getY() + newOtherNodes.get(0).getY()) / 2;
-        var leftI = new Node("I", leftIx, leftIy, newLevel);
+        float leftIx = (nodesBetweenTwo.get1().getX() + newOuterTopNode.getX()) / 2;
+        float leftIy = (nodesBetweenTwo.get1().getY() + newOtherNodes.get(0).getY()) / 2;
+        Node leftI = new Node("I", leftIx, leftIy, newLevel);
         graph.addNode(leftI);
 
-        var rightIx = (nodesBetweenTwo.get3().getX() + newOuterTopNode.getX()) / 2;
-        var rightIy = (newOuterTopNode.getY() + newOuterBottomNode.getY()) / 2;
-        var rightI = new Node("I", rightIx, rightIy, newLevel);
+        float rightIx = (nodesBetweenTwo.get3().getX() + newOuterTopNode.getX()) / 2;
+        float rightIy = (newOuterTopNode.getY() + newOuterBottomNode.getY()) / 2;
+        Node rightI = new Node("I", rightIx, rightIy, newLevel);
         graph.addNode(rightI);
 
         graph.addEdge(newNodesBetweenTwo.get(0), newOuterTopNode);
@@ -103,7 +103,7 @@ public class Production4 implements Production {
         for (Node n1 : inner.getNeighbors()) {
             for (Node n2 : inner.getNeighbors()) {
                 if (n1 != n2) {
-                    var n2Neighbors = new HashSet<>(n2.getNeighbors());
+                    HashSet<Node> n2Neighbors = new HashSet<>(n2.getNeighbors());
                     Set<Node> intersection = n1.getNeighbors().stream()
                             .filter(n2Neighbors::contains)
                             .collect(Collectors.toSet());
@@ -113,8 +113,8 @@ public class Production4 implements Production {
                             && isExactlyInTheMiddle(n1, intersection.stream().findFirst().get(), n2)
                             && intersection.stream().findFirst().get().getNeighbors().stream().noneMatch(e -> e.equals(inner))
                     ) {
-                        var left = nodeComparator.compare(n1, n2) < 0 ? n1 : n2;
-                        var right = nodeComparator.compare(n1, n2) < 0 ? n2 : n1;
+                        Node left = nodeComparator.compare(n1, n2) < 0 ? n1 : n2;
+                        Node right = nodeComparator.compare(n1, n2) < 0 ? n2 : n1;
                         innerENodes.add(new Triple<>(left, intersection.stream().findFirst().get(), right));
                     }
                 }
