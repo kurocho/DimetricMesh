@@ -57,15 +57,29 @@ public class Production4 implements Production {
         Node newOuterBottomNode = new Node("E", coordinates.getKey(), coordinates.getValue(), newLevel);
         graph.addNode(newOuterBottomNode);
 
-        float leftIx = (nodesBetweenTwo.get1().getX() + newOuterTopNode.getX()) / 2;
-        float leftIy = (nodesBetweenTwo.get1().getY() + newOtherNodes.get(0).getY()) / 2;
-        Node leftI = new Node("I", leftIx, leftIy, newLevel);
-        graph.addNode(leftI);
+        Node leftI, rightI;
+        if(nodesBetweenTwo.get2().getY() > otherNodes.stream().map(Node::getY).max(Float::compareTo).get()) {
+            float leftIx = (nodesBetweenTwo.get1().getX() + newOuterTopNode.getX()) / 2;
+            float leftIy = (nodesBetweenTwo.get1().getY() + newOtherNodes.get(0).getY()) / 2;
+            leftI = new Node("I", leftIx, leftIy, newLevel);
+            graph.addNode(leftI);
 
-        float rightIx = (nodesBetweenTwo.get3().getX() + newOuterTopNode.getX()) / 2;
-        float rightIy = (newOuterTopNode.getY() + newOuterBottomNode.getY()) / 2;
-        Node rightI = new Node("I", rightIx, rightIy, newLevel);
-        graph.addNode(rightI);
+            float rightIx = (nodesBetweenTwo.get3().getX() + newOuterTopNode.getX()) / 2;
+            float rightIy = (newOuterTopNode.getY() + newOuterBottomNode.getY()) / 2;
+            rightI = new Node("I", rightIx, rightIy, newLevel);
+            graph.addNode(rightI);
+        } else {
+            float topIx = (nodesBetweenTwo.get1().getX() + newOtherNodes.get(0).getX()) / 2;
+            float topIy = (nodesBetweenTwo.get1().getY() + newOuterTopNode.getY()) / 2;
+            leftI = new Node("I", topIx, topIy, newLevel);
+            graph.addNode(leftI);
+
+            float bottomIx = (nodesBetweenTwo.get3().getX() + newOuterBottomNode.getX()) / 2;
+            float bottomIy = (newOuterBottomNode.getY() + nodesBetweenTwo.get3().getY()) / 2;
+            rightI = new Node("I", bottomIx, bottomIy, newLevel);
+            graph.addNode(rightI);
+        }
+
 
         graph.addEdge(newNodesBetweenTwo.get(0), newOuterTopNode);
         graph.addEdge(newOuterTopNode, newNodesBetweenTwo.get(1));
