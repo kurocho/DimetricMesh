@@ -16,7 +16,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Random;
 
 public class GraphUtil {
 
@@ -39,7 +38,7 @@ public class GraphUtil {
                 org.graphstream.graph.Node n = singleGraph.addNode(node.getId());
                 Pair<Double, Double> vector = getShiftVector(node);
                 n.setAttribute("xy", node.getX() + vector.getKey(), node.getY() + vector.getValue() - node.getLevel() * 4);
-//                n.setAttribute("ui.label", node.getLabel() + " (" + node.getX() + ", " + node.getY() + ")");
+                n.setAttribute("ui.label", node.getLabel() + " (" + node.getX() + ", " + node.getY() + ")");
                 switch (node.getLabel()) {
                     case "I":
                         n.setAttribute("ui.style", "fill-color: red;");
