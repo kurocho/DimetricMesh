@@ -42,15 +42,20 @@ public class Production12 implements Production {
                         .collect(Collectors.toList());
 
         graph.addNode(newNodeI);
-        newNodesE.forEach(node -> {
-            graph.addNode(node);
-            graph.addEdge(node, newNodeI);
-        });
-
-        graph.addEdge(newNodesE.get(0), newNodesE.get(1));
-        graph.addEdge(newNodesE.get(1), newNodesE.get(2));
-        graph.addEdge(newNodesE.get(2), newNodesE.get(3));
-        graph.addEdge(newNodesE.get(3), newNodesE.get(0));
+        for(int i=0;i<newNodesE.size();++i) {
+            final Node firstNode = newNodesE.get(i);
+            graph.addNode(firstNode);
+            graph.addEdge(firstNode, newNodeI);
+            for(int j=i+1;j<newNodesE.size();++j) {
+                final Node secondNode = newNodesE.get(j);
+                final boolean sameNode = firstNode.equals(secondNode);
+                final boolean xLined = firstNode.getX() == secondNode.getX();
+                final boolean yLined = firstNode.getY() == secondNode.getY();
+                if(!sameNode && (xLined || yLined)) {
+                    graph.addEdge(firstNode, secondNode);
+                }
+            }
+        }
 
         graph.addEdge(nodeI, newNodeI);
 

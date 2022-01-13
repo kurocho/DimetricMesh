@@ -16,6 +16,16 @@ public class Graph {
         edges = new ArrayList<>();
     }
 
+    public List<Node> getNeighbors(Node node) {
+        List<Node> result = new ArrayList<>();
+        for (Node otherNode : getNodes()) {
+            if (areNeighbors(node, otherNode)) {
+                result.add(otherNode);
+            }
+        }
+        return result;
+    }
+
     public List<Node> getNeighbors(Node node, String type) {
         List<Node> result = new ArrayList<>();
         for (Node otherNode : getNodes()) {

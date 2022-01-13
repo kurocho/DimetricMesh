@@ -22,7 +22,7 @@ public class Production13 implements Production {
             }
         }
 
-        if (leftNodes == null || rightNodes == null) {
+        if (leftNodes.isEmpty() || rightNodes.isEmpty()) {
             System.out.println("No graph matching left side of production found");
             return graph; // unedited
         }
@@ -30,6 +30,15 @@ public class Production13 implements Production {
         graph.removeEdge(new Edge(rightNodes.get(0), rightNodes.get(2)));
         graph.removeEdge(new Edge(rightNodes.get(0), rightNodes.get(1)));
         graph.removeEdge(new Edge(rightNodes.get(2), rightNodes.get(1)));
+
+        List<Node> firstRightNeighbors = graph.getNeighbors(rightNodes.get(0));
+        List<Node> secondRightNeighbors = graph.getNeighbors(rightNodes.get(2));
+        final Node firstLeft = leftNodes.get(0);
+        final Node secondLeft = leftNodes.get(2);
+
+        firstRightNeighbors.forEach(neighbor -> graph.addEdge(firstLeft, neighbor));
+        secondRightNeighbors.forEach(neighbor -> graph.addEdge(secondLeft, neighbor));
+
         graph.removeNode(rightNodes.get(0));
         graph.removeNode(rightNodes.get(2));
 
@@ -40,7 +49,7 @@ public class Production13 implements Production {
     }
 
     private List<Node> getLeftSide(Graph graph, Node rootNode) {
-        List<Node> iRootNodeNeighbors = graph.getNeighbors(rootNode, "I");
+        List<Node> iRootNodeNeighbors = graph.getNeighbors(rootNode, "i");
         for (Node node : iRootNodeNeighbors) {
             Map<Node, List<Node>> iNeighborhood = new HashMap<>();
             Map<Node, List<Node>> eNeighborhood = new HashMap<>();
@@ -53,21 +62,25 @@ public class Production13 implements Production {
                 });
             }
             iNeighborhood.keySet().forEach(neighbor -> eNeighborhood.put(neighbor, graph.getNeighbors(neighbor, "E")));
-            Map<Node, Pair<List<Node>, List<Node>>> neighborhood = new HashMap<>();
+            Map<Node, Pair<Pair<Node, Node>, Pair<Node, Node>>> neighborhood = new HashMap<>();
             iNeighborhood.keySet().forEach(key -> {
                 List<Node> iValue = iNeighborhood.get(key);
                 List<Node> eValue = eNeighborhood.get(key);
-                if(iValue != null && iValue.size() == 2 && eValue != null && eValue.size() == 2) {
-                    neighborhood.put(key, new Pair<>(iValue, eValue));
+                if(iValue != null && eValue != null) {
+                    final Pair<Node, Node> iPair = getTwoYLined(iValue);
+                    final Pair<Node, Node> ePair = getTwoYLined(eValue);
+                    if(iPair != null && ePair != null) {
+                        neighborhood.put(key, new Pair<>(iPair, ePair));
+                    }
                 }
             });
             if(neighborhood.keySet().isEmpty()) continue;
             for (Node key : neighborhood.keySet()) {
-                Pair<List<Node>, List<Node>> pair = neighborhood.get(key);
-                Node firstI = pair.getKey().get(0);
-                Node secondI = pair.getKey().get(1);
-                Node firstE = pair.getValue().get(0);
-                Node secondE = pair.getValue().get(1);
+                Pair<Pair<Node, Node>, Pair<Node, Node>> pair = neighborhood.get(key);
+                Node firstI = pair.getKey().getKey();
+                Node secondI = pair.getKey().getValue();
+                Node firstE = pair.getValue().getKey();
+                Node secondE = pair.getValue().getValue();
                 if((graph.areNeighbors(firstI, firstE) && graph.areNeighbors(secondI, secondE)) ||
                         (graph.areNeighbors(firstI, secondE) && graph.areNeighbors(secondI, firstE))) {
                     List<Node> result = new ArrayList<>();
@@ -82,7 +95,7 @@ public class Production13 implements Production {
     }
 
     private List<Node> getRightSide(Graph graph, Node rootNode, Node samePosition1, Node samePosition2) {
-        List<Node> iRootNodeNeighbors = graph.getNeighbors(rootNode, "I");
+        List<Node> iRootNodeNeighbors = graph.getNeighbors(rootNode, "i");
         for (Node node : iRootNodeNeighbors) {
             Map<Node, List<Node>> iNeighborhood = new HashMap<>();
             Map<Node, List<Node>> eNeighborhood = new HashMap<>();
@@ -99,7 +112,7 @@ public class Production13 implements Production {
             iNeighborhood.keySet().forEach(key -> {
                 List<Node> iValue = iNeighborhood.get(key);
                 List<Node> eValue = eNeighborhood.get(key);
-                if(iValue != null && iValue.size() == 1 && eValue != null && eValue.size() == 1) {
+                if(iValue != null && eValue != null) {
                     neighborhood.put(key, new Pair<>(iValue, eValue));
                 }
             });
@@ -128,5 +141,17 @@ public class Production13 implements Production {
             }
         }
         return new ArrayList<>();
+    }
+
+    private Pair<Node, Node> getTwoYLined(List<Node> nodes) {
+        if(nodes.size() < 2) return null;
+        for(int i=0; i<nodes.size()-1; ++i) {
+            final Node firstNode = nodes.get(i);
+            for(int j=i+1; j<nodes.size(); ++j) {
+                final Node secondNode = nodes.get(j);
+                if(firstNode.getX() == secondNode.getX()) return new Pair<>(firstNode, secondNode);
+            }
+        }
+        return null;
     }
 }
