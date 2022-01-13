@@ -9,8 +9,8 @@ public class Production13Util {
         Node mainNode = new Node("E", 0, 0, 0);
         resultGraph.addNode(mainNode);
 
-        Node leftI = new Node("I", -1, -1, 0);
-        Node rightI = new Node("I", 1, -1, 0);
+        Node leftI = new Node("i", -1, -1, 0);
+        Node rightI = new Node("i", 1, -1, 0);
         resultGraph.addNode(leftI);
         resultGraph.addNode(rightI);
         resultGraph.addEdge(mainNode, leftI);
