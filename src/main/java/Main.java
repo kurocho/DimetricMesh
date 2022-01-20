@@ -1,16 +1,33 @@
 import graph.*;
-import production.Production1;
-import production.Production12;
-import production.Production13;
-import production.Production2;
+import production.*;
 import util.Production13Util;
 
 public class Main {
+    static void taskB(){
+        Graph graph = new Graph();
 
-    public static void main(String[] args) {
-        System.setProperty("org.graphstream.ui", "javafx");
-        System.setProperty("org.graphstream.debug", "true");
+        Node e = new Node("E", 1, 1, 0);
+        graph.addNode(e);
 
+        graph.applyProduction(new Production1());
+        graph.applyProduction(new Production3());
+
+
+        graph.applyProduction(new Production2(Production2.BreakMode.HORIZONTAL));
+        graph.applyProduction(new Production12());
+        graph.applyProduction(new Production2(Production2.BreakMode.VERTICAL));
+        graph.applyProduction(new Production2(Production2.BreakMode.HORIZONTAL));
+
+
+        graph.applyProduction(new Production13());
+        graph.applyProduction(new Production13());
+
+        graph.applyProduction(new Production15());
+        graph.applyProduction(new Production14Hacks());
+        GraphUtil.displayGraph(graph, 3);
+    }
+
+    static void taskA(){
         Graph graph = new Graph();
 
         Node e = new Node("E", 1, 1, 0);
@@ -34,6 +51,13 @@ public class Main {
         Graph production13Graph = Production13Util.getGraph();
         production13Graph.applyProduction(new Production13());
         GraphUtil.displayGraph(production13Graph);
+    }
+
+    public static void main(String[] args) {
+        System.setProperty("org.graphstream.ui", "javafx");
+        System.setProperty("org.graphstream.debug", "true");
+
+        taskB();
     }
 
 }
