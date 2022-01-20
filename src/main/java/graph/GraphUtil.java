@@ -36,9 +36,9 @@ public class GraphUtil {
         for (Node node : graph.getNodes()) {
             try {
                 org.graphstream.graph.Node n = singleGraph.addNode(node.getId());
-                Pair<Double, Double> vector = getShiftVector(node);
+                Pair<Double, Double> vector = getShiftVector(node, 0.4f);
                 n.setAttribute("xy", node.getX() + vector.getKey(), node.getY() + vector.getValue() - node.getLevel() * 4);
-                n.setAttribute("ui.label", node.getLabel() + " (" + node.getX() + ", " + node.getY() + ")");
+//                n.setAttribute("ui.label", node.getLabel() + " (" + node.getX() + ", " + node.getY() + ")" + node.getNodeId());
                 switch (node.getLabel()) {
                     case "I":
                         n.setAttribute("ui.style", "fill-color: red;");
@@ -62,7 +62,7 @@ public class GraphUtil {
         disableMouseEvents(viewer);
     }
 
-    public static Pair<Double, Double> getShiftVector(Node node) {
+    public static Pair<Double, Double> getShiftVector(Node node, float strength) {
         List<Node> connectedNodes = new ArrayList<>();
         for (Edge edge : node.getEdges()) {
             if (edge.getEnd().getLevel() != edge.getStart().getLevel()) continue;
@@ -77,7 +77,7 @@ public class GraphUtil {
         }
 
         double vectorLength = Math.sqrt(vectorX * vectorX + vectorY * vectorY) * 5;
-        return vectorLength == 0 ? new Pair<>(0.0, 0.0) : new Pair<>(vectorX/vectorLength, vectorY/vectorLength);
+        return vectorLength == 0 ? new Pair<>(0.0, 0.0) : new Pair<>(strength * vectorX/vectorLength, strength * vectorY/vectorLength);
     }
 
     public static void displayGraph(Graph graph, int level) {

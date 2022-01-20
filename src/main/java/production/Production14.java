@@ -5,9 +5,12 @@ import graph.Graph;
 import graph.Node;
 import javafx.util.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class Production13 implements Production {
+public class Production14 implements Production {
 
     @Override
     public Graph apply(Graph graph) {
@@ -27,7 +30,7 @@ public class Production13 implements Production {
         }
 
         if (leftNodes.isEmpty() || rightNodes.isEmpty()) {
-            System.out.println("No graph matching left side of production found");
+            System.out.println(">> No graph matching left side of production found");
             return graph; // unedited
         }
 
@@ -40,15 +43,17 @@ public class Production13 implements Production {
         final Node firstLeft = leftNodes.get(0);
         final Node secondLeft = leftNodes.get(2);
 
+        Node sharedNode = firstLeft == rightNodes.get(0) || secondLeft == rightNodes.get(0) ? rightNodes.get(0) : rightNodes.get(2);
+        Node redundantNode = sharedNode == rightNodes.get(0) ? rightNodes.get(2) : rightNodes.get(0);
+
         firstRightNeighbors.forEach(neighbor -> graph.addEdge(firstLeft, neighbor));
         secondRightNeighbors.forEach(neighbor -> graph.addEdge(secondLeft, neighbor));
 
-        graph.removeNode(rightNodes.get(0));
-        graph.removeNode(rightNodes.get(2));
+        graph.removeNode(redundantNode);
 
         graph.addEdge(rightNodes.get(1), leftNodes.get(0));
         graph.addEdge(rightNodes.get(1), leftNodes.get(2));
-
+//
         return graph;
     }
 
@@ -122,35 +127,49 @@ public class Production13 implements Production {
             iNeighborhood.keySet().forEach(key -> {
                 List<Node> iValue = iNeighborhood.get(key);
                 List<Node> eValue = eNeighborhood.get(key);
-                if(iValue != null && eValue != null) {
+                if (iValue != null && eValue != null) {
                     neighborhood.put(key, new Pair<>(iValue, eValue));
                 }
             });
-            if(neighborhood.keySet().isEmpty()) continue;
+            if (neighborhood.keySet().isEmpty()) continue;
             for (Node key : neighborhood.keySet()) {
                 Node eValue = eNeighborhood.get(key).get(0);
                 Node iValue = iNeighborhood.get(key).get(0);
-                if(key.getX() == samePosition1.getX() && key.getY() == samePosition1.getY()) {
-                    if(eValue.getX() == samePosition2.getX() && eValue.getY() == samePosition2.getY()) {
-                        List<Node> result = new ArrayList<>();
-                        result.add(key);
-                        result.add(iValue);
-                        result.add(eValue);
-                        return result;
+                if ((graph.areNeighbors(eValue, iValue))) {
+                    if (key.getX() == samePosition1.getX() && key.getY() == samePosition1.getY()) {
+                        if (eValue.getX() == samePosition2.getX() && eValue.getY() == samePosition2.getY()) {
+                            if (hasOneCommonNode(key, eValue, samePosition1, samePosition2)) {
+                                List<Node> result = new ArrayList<>();
+                                result.add(key);
+                                result.add(iValue);
+                                result.add(eValue);
+                                return result;
+                            }
+                        }
                     }
-                }
-                if(key.getX() == samePosition2.getX() && key.getY() == samePosition2.getY()) {
-                    if(eValue.getX() == samePosition1.getX() && eValue.getY() == samePosition1.getY()) {
-                        List<Node> result = new ArrayList<>();
-                        result.add(eValue);
-                        result.add(iValue);
-                        result.add(key);
-                        return result;
+                    if (key.getX() == samePosition2.getX() && key.getY() == samePosition2.getY()) {
+                        if (eValue.getX() == samePosition1.getX() && eValue.getY() == samePosition1.getY()) {
+                            if (hasOneCommonNode(key, eValue, samePosition1, samePosition2)) {
+                                List<Node> result = new ArrayList<>();
+                                result.add(eValue);
+                                result.add(iValue);
+                                result.add(key);
+                                return result;
+                            }
+                        }
                     }
+
                 }
             }
         }
         return new ArrayList<>();
+    }
+
+    private boolean hasOneCommonNode(Node firstLeft, Node secondLeft, Node firstRight, Node secondRight) {
+        return (firstLeft == firstRight && secondLeft != secondRight) ||
+                (secondLeft == secondRight && firstLeft != firstRight) ||
+                (firstLeft == secondRight && secondLeft != firstRight) ||
+                (secondLeft == firstRight && firstLeft != secondRight);
     }
 
     private Pair<Node, Node> getTwoYLined(List<Node> nodes) {

@@ -1,9 +1,7 @@
 import graph.*;
-import production.Production1;
-import production.Production12;
-import production.Production13;
-import production.Production2;
+import production.*;
 import util.Production13Util;
+import util.Production14Util;
 
 public class Main {
 
@@ -18,13 +16,21 @@ public class Main {
 
         graph.applyProduction(new Production1());
 
+        graph.applyProduction(new Production3());
+
         graph.applyProduction(new Production2(Production2.BreakMode.HORIZONTAL));
+
+        graph.applyProduction(new Production12());
 
         graph.applyProduction(new Production2(Production2.BreakMode.VERTICAL));
         graph.applyProduction(new Production2(Production2.BreakMode.HORIZONTAL));
 
-        graph.applyProduction(new Production12());
-        graph.applyProduction(new Production12());
+        graph.applyProduction(new Production13());
+        graph.applyProduction(new Production13());
+
+        graph.applyProduction(new Production15());
+        graph.applyProduction(new Production14());
+
 
 //        GraphUtil.displayGraph(graph, 0);
 //        GraphUtil.displayGraph(graph,1);

@@ -56,6 +56,10 @@ public class Node {
         return level;
     }
 
+    public int getNodeId() {
+        return nodeId;
+    }
+
     public String getId() {
         return label + "|" + x + "|" + y + "|" + level + "|" + nodeId;
     }
