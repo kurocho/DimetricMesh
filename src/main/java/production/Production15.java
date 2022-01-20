@@ -4,7 +4,6 @@ import graph.Edge;
 import graph.Graph;
 import graph.Node;
 import javafx.util.Pair;
-import jdk.nashorn.internal.runtime.options.Option;
 
 import java.util.*;
 import java.util.stream.Collectors;
