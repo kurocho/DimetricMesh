@@ -136,23 +136,6 @@ public class Production12Tests {
         assertThatNodeIsAtLocationAndLevel("I", 2, 1, 1);
     }
 
-    @Test
-    void shouldNorWorkWithChangedNodeCoord() {
-        graph.applyProduction(new Production1());
-        Node node1 = graph.getNodes().get(2);
-        List<Node> neighbours = node1.getNeighbors();
-        graph.removeNode(node1);
-        Node newNode = new Node(node1.getLabel(), -1, node1.getY(), node1.getLevel());
-        graph.addNode(newNode);
-        for(Node n:neighbours) {
-            graph.addEdge(n, newNode);
-        }
-        //when
-        graph.applyProduction(new Production12());
-        //then
-        assertThatAmountAtLevelIsCorrect("E", 2, 0);
-    }
-
     private void assertThatNodeIsAtLocationAndLevel(String label, int level, float x, float y) {
         long count = graph.getNodes().stream().filter(n -> n.getLabel().equals(label) && n.getX() == x && n.getY() == y && n.getLevel() == level).count();
         assert count > 0;
